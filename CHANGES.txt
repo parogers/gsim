@@ -1,0 +1,20 @@
+Changes
+-------
+
+v0.21 (July 31, 2011)
+    -Added support for 'T' gcodes
+    -Fixed rendering bug when at the end of the timeline
+    -Added support for 'G04' (dwell) gcode
+
+v0.2 (June 25, 2011)
+    -Fixed bug with opening a file after another is loaded
+    -Fixed bug with numpy coordinates and rounding errors
+
+v0.15 (June 15, 2011)
+    -Added support for standalone F### command
+    -Added textview widget for displaying the program source code
+
+v0.1 (June 1, 2011)
+    -Original release
+
+
