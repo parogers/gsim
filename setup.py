@@ -7,6 +7,7 @@ setup(
     name = "GSim",
     version = "0.21",
     author = "Peter Rogers",
+    author_email = "peter.rogers@gmail.com",
     url = "https://github.com/parogers/gsim",
     description = "G-Code simulator",
     license = "GPLv2+",
