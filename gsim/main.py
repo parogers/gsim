@@ -30,8 +30,8 @@ except ImportError:
     print("ERROR - Cannot import gtk module. Please visit http://www.pygtk.org/")
     sys.exit()
 
-import gcode
-from render import GCodeRenderWidget
+from gsim import gcode
+from gsim.render import GCodeRenderWidget
 
 print """TODO
 -text wraps in source view?

@@ -4,7 +4,7 @@ import re
 import os
 import sys
 
-import gcode
+from gsim import gcode
 
 try:
     path = sys.argv[1]
