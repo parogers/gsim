@@ -361,7 +361,7 @@ class State(object):
             except KeyError:
                 pass
 
-            if (this.pos == None):
+            if (this.pos is None):
                 # Use this move to define the starting position
                 this.pos = numpy.array([params["X"], params["Y"]])
                 return
@@ -494,17 +494,17 @@ class State(object):
         if (this.lineno >= len(this.program.statements)):
             this.finished = True
 
-        if (this.pos == None):
+        if (this.pos is None):
             return
 
         # Update the minimum pos
-        if (this.minPos == None):
+        if (this.minPos is None):
             this.minPos = this.pos.copy()
         else:
             this.minPos[0] = min(this.pos[0], this.minPos[0])
             this.minPos[1] = min(this.pos[1], this.minPos[1])
         # Update the max position too
-        if (this.maxPos == None):
+        if (this.maxPos is None):
             this.maxPos = this.pos.copy()
         else:
             this.maxPos[0] = max(this.pos[0], this.maxPos[0])

@@ -331,7 +331,7 @@ class MainWindow(object):
     # Updates the status (eg sensitivity) of various widgets based on the
     # program state.
     def update_status(this):
-        b = (this.state != None)
+        b = (this.state is not None)
         this.playButton.set_sensitive(b)
         this.stopButton.set_sensitive(b)
         this.zoomInButton.set_sensitive(b)
@@ -383,7 +383,7 @@ class MainWindow(object):
         this.timeSlider.queue_draw()
         # Update the head coordinates too
         pos = this.renderArea.get_head_pos()
-        if (pos != None):
+        if (pos is not None):
             this.coordsLabel.set_text("(%0.1f, %0.1f) (mm)" % (pos[0], pos[1]))
 
     # Called when the user clicks on the open icon
