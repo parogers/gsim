@@ -23,7 +23,7 @@
 
 import math
 import numpy
-import gcode
+from gsim import gcode
 import time
 try:
     import gtk
