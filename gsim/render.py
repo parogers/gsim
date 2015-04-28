@@ -307,7 +307,7 @@ class GCodeRenderWidget(gtk.DrawingArea):
             if (path == currentPath):
                 break
 
-        if (lastPos != None):
+        if (lastPos is not None):
             # Render the cutting head
             (xp, yp) = lastPos
             size = 1.5
