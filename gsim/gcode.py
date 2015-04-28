@@ -226,6 +226,10 @@ class Line(Path):
         this.length = numpy.linalg.norm(this.end-this.start)
         this.duration = this.length/float(this.feedRate)
 
+    def __repr__(this):
+        template = '{0.__class__.__name__}({0.start}, {0.end}, {0.feedRate})'
+        return template.format(this)
+
 # An arc segment
 class Arc(Path):
     clockwise = True
@@ -258,12 +262,21 @@ class Arc(Path):
         this.length = this.radius * diff
         this.duration = this.length/float(this.feedRate)
 
+    def __repr__(this):
+        template = ('{0.__class__.__name__}({0.start}, {0.end}, {0.center}, '
+                    '{0.feedRate}, {0.clockwise})')
+        return template.format(this)
+
 class ToolChange(Path):
-	length = 0
-	duration = 0
+    length = 0
+    duration = 0
+    def __repr__(this):
+        return this.__class__.__name__ + '()'
 
 class Dwell(Path):
     duration = 0
+    def __repr__(this):
+        return this.__class__.__name__ + '()'
 
 class State(object):
     variables = None
@@ -511,3 +524,29 @@ class State(object):
             this.maxPos[1] = max(this.pos[1], this.maxPos[1])
 
 
+def dump_parse():
+    """Command line function to print G-code from a file."""
+    import re
+    import os
+    import sys
+    from pprint import pprint
+
+    if len(sys.argv) != 2:
+        print 'Please give path to G-code file.'
+        sys.exit(1)
+    path = sys.argv[1]
+    if not os.path.isfile(path):
+        print 'File does not exist.'
+        sys.exit(1)
+
+    prog = parse_program(path)
+    state = prog.start()
+
+    while not state.finished:
+        state.step()
+
+    pprint(state.paths)
+
+
+if __name__ == '__main__':
+    dump_parse()

@@ -37,19 +37,23 @@ Installation
 
 To run the G-Code simulator you will need:
 
-    * Python 2.6 or later (probably runs on Python 3)
+    * Python 2.6 or later (does not yet run on Python 3)
     * GTK for Python (http://www.pygtk.org)
     * Numpy (http://numpy.scipy.org)
 
-Run the script from the command-line:
+Run the script from the command line:
 
-    python main.py
+    python gsim-launch.py
+
+You can also view the parsed G-code with the command:
+
+    python -m gsim.gcode
 
 The program has been tested on Linux but should work in Windows as well.
 
 License
 -------
 
-The source is released under the GPL v2 license. See LICENSE.txt for more details.
+The source is released under the GPL v2 (or later). See LICENSE.txt for more details.
 
 
