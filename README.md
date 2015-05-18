@@ -31,6 +31,13 @@ Future plans:
     * Render the job with configurable colors
     * Include a listing of the script in a side panel
     * Script editor?
+    * Text wraps in source view?
+    * Jump to selected line
+    * Optimize rendering (particularly when seeking backwards)
+    * Plugin - match coordinate systems - inkscape + laser
+    * Save program preferences
+    * Dimension render area?
+    * Slider for speed control
 
 Installation
 ------------

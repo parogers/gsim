@@ -17,6 +17,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+from __future__ import absolute_import, division, print_function
+
 ###########
 # Imports #
 ###########
@@ -32,17 +34,6 @@ except ImportError:
 
 from gsim import gcode
 from gsim.render import GCodeRenderWidget
-
-print """TODO
--text wraps in source view?
--jump to selected line
--optimize rendering
--plugin - match coordinate systems - inkscape + laser
--save program preferences
--dimension render area?
--option to render commands in different colors
--slider for speed control
-"""
 
 #############
 # Constants #
@@ -149,7 +140,7 @@ class MainWindow(object):
         tag.set_property("background", "#f03030")
 
         (w, h) = this.window.get_size()
-        text.set_size_request(w/3, -1)
+        text.set_size_request(w//3, -1)
 
         # Create a box at the bottom of the window to hold the status label and coordinates label
         hbox = gtk.HBox()

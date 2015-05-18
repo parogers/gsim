@@ -17,6 +17,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+from __future__ import absolute_import, division, print_function
+
 import sys
 import math
 try:
@@ -532,11 +534,11 @@ def dump_parse():
     from pprint import pprint
 
     if len(sys.argv) != 2:
-        print 'Please give path to G-code file.'
+        print('Please give path to G-code file.')
         sys.exit(1)
     path = sys.argv[1]
     if not os.path.isfile(path):
-        print 'File does not exist.'
+        print('File does not exist.')
         sys.exit(1)
 
     prog = parse_program(path)
