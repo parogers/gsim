@@ -23,13 +23,14 @@ from __future__ import absolute_import, division, print_function
 # Imports #
 ###########
 
-import pango
+from gi.repository import Pango
 import sys
 try:
-    import gtk
-    import gobject
+    from gi.repository import Gtk
+    from gi.repository import Gdk
+    from gi.repository import GObject
 except ImportError:
-    print("ERROR - Cannot import gtk module. Please visit http://www.pygtk.org/")
+    print("ERROR - Cannot import gtk module. Please visit http://www.pyGtk.org/")
     sys.exit()
 
 from gsim import gcode
@@ -47,7 +48,7 @@ VERSION = "0.21"
 
 # Display a message box to the user, wait for it to close
 def show_message(win, msg):
-    w = gtk.MessageDialog(win, buttons=gtk.BUTTONS_OK)
+    w = Gtk.MessageDialog(win, buttons=Gtk.ButtonsType.OK)
     w.set_markup(msg)
     w.run()
     w.destroy()
@@ -75,57 +76,57 @@ class MainWindow(object):
     state = None
 
     def __init__(this):
-        this.window = gtk.Window()
+        this.window = Gtk.Window()
         this.window.set_title("GCode Simulator")
         this.window.set_size_request(800, 500)
-        this.window.connect("delete-event", gtk.main_quit)
+        this.window.connect("delete-event", Gtk.main_quit)
 
         # Create a vertical box to hold everything
-        vbox = gtk.VBox()
+        vbox = Gtk.VBox()
         vbox.show()
         this.window.add(vbox)
 
         # Build the main menu
         menu = this.build_menu()
-        vbox.pack_start(menu, False, False)
+        vbox.pack_start(menu, False, False, padding=0)
 
         # Create a timeline slider
-        adj = gtk.Adjustment(value=0, lower=0, upper=100, step_incr=0.1, page_incr=1, page_size=1)
+        adj = Gtk.Adjustment(value=0, lower=0, upper=100, step_incr=0.1, page_incr=1, page_size=1)
         this.sliderChangedID = adj.connect("value-changed", this.time_slider_changed_cb)
-        slider = gtk.HScale(adj)
+        slider = Gtk.HScale(adjustment=adj)
         slider.show()
         this.timeSlider = slider
         this.timeAdjust = adj
 
         vbox.pack_start(slider, False, False, padding=4)
 
-        hbox = gtk.HPaned()
+        hbox = Gtk.HPaned()
         hbox.show()
-        vbox.pack_start(hbox, True, True)
+        vbox.pack_start(hbox, True, True, padding=0)
 
         # Create the drawing canvas
         this.renderArea = GCodeRenderWidget()
-        this.renderArea.add_events(gtk.gdk.POINTER_MOTION_MASK | gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK)
+        this.renderArea.add_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK)
         this.renderArea.connect("time-changed", this.time_changed_cb)
         this.renderArea.connect("motion-notify-event", this.mouse_motion_cb)
         this.renderArea.connect("button-press-event", this.mouse_button_cb)
         this.renderArea.connect("button-release-event", this.mouse_button_cb)
         this.renderArea.show()
         #vbox.pack_start(this.renderArea, True, True)
-        frame = gtk.Frame()
-        frame.set_shadow_type(gtk.SHADOW_ETCHED_IN)
+        frame = Gtk.Frame()
+        frame.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
         frame.show()
         frame.add(this.renderArea)
         hbox.pack1(frame, resize=True)
 
         # Add the program source area
-        text = gtk.TextView()
+        text = Gtk.TextView()
         text.show()
         text.set_editable(False)
         text.set_property("can-focus", False)
         this.programText = text
-        scroll = gtk.ScrolledWindow()
-        scroll.set_shadow_type(gtk.SHADOW_ETCHED_IN)
+        scroll = Gtk.ScrolledWindow()
+        scroll.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
         scroll.show()
         scroll.add(text)
         hbox.pack2(scroll, resize=False)
@@ -133,7 +134,7 @@ class MainWindow(object):
         buf = text.get_buffer()
         numbersTag = buf.create_tag("numbers")
         numbersTag.set_property("background", "#f0f0f0")
-        numbersTag.set_property("weight", pango.WEIGHT_LIGHT)
+        numbersTag.set_property("weight", Pango.Weight.LIGHT)
 
         # Create a tag for highlighted lines
         tag = buf.create_tag("highlight")
@@ -143,21 +144,21 @@ class MainWindow(object):
         text.set_size_request(w//3, -1)
 
         # Create a box at the bottom of the window to hold the status label and coordinates label
-        hbox = gtk.HBox()
+        hbox = Gtk.HBox()
         hbox.show()
-        vbox.pack_start(hbox, False, False)
+        vbox.pack_start(hbox, False, False, padding=0)
 
         # Create a status bar
-        this.statusLabel = gtk.Label()
+        this.statusLabel = Gtk.Label()
         this.statusLabel.set_alignment(-1, 0)
         this.statusLabel.set_padding(4, 4)
         this.statusLabel.show()
-        hbox.pack_start(this.statusLabel, True, True)
+        hbox.pack_start(this.statusLabel, True, True, padding=0)
 
         # Now create the label
-        this.coordsLabel = gtk.Label()
+        this.coordsLabel = Gtk.Label()
         this.coordsLabel.show()
-        hbox.pack_start(this.coordsLabel, False, False)
+        hbox.pack_start(this.coordsLabel, False, False, padding=0)
 
         # Update the window status
         this.update_status()
@@ -224,15 +225,15 @@ class MainWindow(object):
         lineno = this.renderArea.get_current_path().statement.lineNumber
         start = buf.get_iter_at_line(lineno)
         buf.apply_tag_by_name("highlight", start, buf.get_iter_at_line(lineno+1))
-        this.programText.scroll_to_iter(start, 0.2)
+        this.programText.scroll_to_iter(start, 0.2, False, 0.5, 0.5)
 
     def build_menu(this):
         # Build the menu bar
-        menu = gtk.Toolbar()
+        menu = Gtk.Toolbar()
         menu.show()
 
         # The open button
-        item = gtk.ToolButton(gtk.STOCK_OPEN)
+        item = Gtk.ToolButton(Gtk.STOCK_OPEN)
         item.set_tooltip_text("Open a gcode file")
         item.connect("clicked", this.open_cb)
         item.show()
@@ -240,12 +241,12 @@ class MainWindow(object):
         this.openButton = item
 
         # Separator
-        item = gtk.SeparatorToolItem()
+        item = Gtk.SeparatorToolItem()
         item.show()
         menu.insert(item, -1)
 
         # The play button
-        item = gtk.ToolButton(gtk.STOCK_MEDIA_PLAY)
+        item = Gtk.ToolButton(Gtk.STOCK_MEDIA_PLAY)
         item.set_tooltip_text("Play gcode simulation")
         item.connect("clicked", this.play_cb)
         item.show()
@@ -253,7 +254,7 @@ class MainWindow(object):
         this.playButton = item
 
         # The stop button
-        item = gtk.ToolButton(gtk.STOCK_MEDIA_STOP)
+        item = Gtk.ToolButton(Gtk.STOCK_MEDIA_STOP)
         item.set_tooltip_text("Stop simulation")
         item.connect("clicked", this.stop_cb)
         item.show()
@@ -261,7 +262,7 @@ class MainWindow(object):
         this.stopButton = item
 
         # The rewind button
-        item = gtk.ToolButton(gtk.STOCK_MEDIA_REWIND)
+        item = Gtk.ToolButton(Gtk.STOCK_MEDIA_REWIND)
         item.set_tooltip_text("Reset simulation")
         item.connect("clicked", this.rewind_cb)
         item.show()
@@ -269,7 +270,7 @@ class MainWindow(object):
         this.rewindButton = item
 
         # The fast forward button
-        item = gtk.ToolButton(gtk.STOCK_MEDIA_FORWARD)
+        item = Gtk.ToolButton(Gtk.STOCK_MEDIA_FORWARD)
         item.set_tooltip_text("Jump to end")
         item.connect("clicked", this.forward_cb)
         item.show()
@@ -277,12 +278,12 @@ class MainWindow(object):
         this.forwardButton = item
 
         # Separator
-        item = gtk.SeparatorToolItem()
+        item = Gtk.SeparatorToolItem()
         item.show()
         menu.insert(item, -1)
 
         # The zoom in button
-        item = gtk.ToolButton(gtk.STOCK_ZOOM_IN)
+        item = Gtk.ToolButton(Gtk.STOCK_ZOOM_IN)
         item.set_tooltip_text("Zoom in")
         item.connect("clicked", this.zoom_in_cb)
         item.show()
@@ -290,7 +291,7 @@ class MainWindow(object):
         this.zoomInButton = item
 
         # The zoom out button
-        item = gtk.ToolButton(gtk.STOCK_ZOOM_OUT)
+        item = Gtk.ToolButton(Gtk.STOCK_ZOOM_OUT)
         item.set_tooltip_text("Zoom out")
         item.connect("clicked", this.zoom_out_cb)
         item.show()
@@ -298,7 +299,7 @@ class MainWindow(object):
         this.zoomOutButton = item
 
         # The zoom fit button
-        item = gtk.ToolButton(gtk.STOCK_ZOOM_100)
+        item = Gtk.ToolButton(Gtk.STOCK_ZOOM_100)
         item.set_tooltip_text("Zoom all")
         item.connect("clicked", this.zoom_default_cb)
         item.show()
@@ -306,12 +307,12 @@ class MainWindow(object):
         this.zoomFitButton = item
 
         # Separator
-        item = gtk.SeparatorToolItem()
+        item = Gtk.SeparatorToolItem()
         item.show()
         menu.insert(item, -1)
 
         # The help button
-        item = gtk.ToolButton(gtk.STOCK_HELP)
+        item = Gtk.ToolButton(Gtk.STOCK_HELP)
         item.set_tooltip_text("About this program")
         item.connect("clicked", this.help_cb)
         item.show()
@@ -382,22 +383,22 @@ class MainWindow(object):
         # Stop playback
         this.renderArea.set_playing(False)
 
-        w = gtk.FileChooserDialog("Open file...", this.window, buttons=("Open file", gtk.RESPONSE_OK))
+        w = Gtk.FileChooserDialog("Open file...", this.window, buttons=("Open file", Gtk.ResponseType.OK))
 
         # Add a filter for gcode scripts
-        flt = gtk.FileFilter()
+        flt = Gtk.FileFilter()
         flt.set_name("GCode scripts (*.ngc)")
         flt.add_pattern("*.ngc")
         w.add_filter(flt)
 
         # Add a filter for everything else
-        flt = gtk.FileFilter()
+        flt = Gtk.FileFilter()
         flt.set_name("All files")
         flt.add_pattern("*")
         w.add_filter(flt)
 
         ret = w.run()
-        if (ret == gtk.RESPONSE_OK):
+        if (ret == Gtk.ResponseType.OK):
             this.load_program(w.get_filename())
 
         w.destroy()
@@ -414,7 +415,7 @@ class MainWindow(object):
         # Calculate the zoom level so that everything fits on the screen
         (dx, dy) = this.renderArea.get_render_size()
 
-        (w, h) = this.renderArea.window.get_size()
+        (w, h) = this.renderArea.get_toplevel().get_size()
         zoom = min(w/float(dx), h/float(dy))
 
         this.renderArea.set_zoom(zoom)
@@ -423,7 +424,7 @@ class MainWindow(object):
 
     def mouse_button_cb(this, w, event):
         if (event.button == 1):
-            if (event.type == gtk.gdk.BUTTON_PRESS):
+            if (event.type == Gdk.EventType.BUTTON_PRESS):
                 # Start dragging around the render area when the user clicks
                 # the left mouse button.
                 this.dragging = True
@@ -469,7 +470,7 @@ def main():
     else:
         w.load_program(path)
 
-    gtk.main()
+    Gtk.main()
 
 if (__name__ == "__main__"):
     main()
