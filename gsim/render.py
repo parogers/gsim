@@ -152,7 +152,8 @@ class GCodeRenderWidget(Gtk.DrawingArea):
         return this._paths[-1]
 
     def repaint_buffer(this):
-        (canvasWidth, canvasHeight) = this.get_toplevel().get_size()
+        canvasWidth = this.get_allocated_width()
+        canvasHeight = this.get_allocated_height()
 
 #        if (not this._pixmap or this._pixmap.get_size() != (w,h)):
 #            this._repaint = True

@@ -415,7 +415,8 @@ class MainWindow(object):
         # Calculate the zoom level so that everything fits on the screen
         (dx, dy) = this.renderArea.get_render_size()
 
-        (w, h) = this.renderArea.get_toplevel().get_size()
+        w = this.renderArea.get_allocated_width()
+        h = this.renderArea.get_allocated_height()
         zoom = min(w/float(dx), h/float(dy))
 
         this.renderArea.set_zoom(zoom)
