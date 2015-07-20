@@ -28,17 +28,18 @@ import numpy
 from gsim import gcode
 import time
 try:
-    import gtk
-    import gobject
+    from gi.repository import Gtk
+    from gi.repository import Gdk
+    from gi.repository import GObject
 except ImportError:
-    print("ERROR - Cannot import gtk module. Please visit http://www.pygtk.org/")
-    sys.exit()
+    print("ERROR - Cannot import GObject Introspection module. Please visit https://live.gnome.org/PyGObject\n")
+    raise
 
 ###########
 # Classes #
 ###########
 
-class GCodeRenderWidget(gtk.DrawingArea):
+class GCodeRenderWidget(Gtk.DrawingArea):
 #    _pathIndex = 0
 #    _pathParam = 0
     # The gcode state
@@ -61,12 +62,12 @@ class GCodeRenderWidget(gtk.DrawingArea):
     _offset = None
 
     def __init__(this):
-        gtk.DrawingArea.__init__(this)
-        this.connect("expose-event", this.expose_cb)
+        GObject.GObject.__init__(this)
+        this.connect("draw", this.expose_cb)
         this._startTime = time.time()
         this._lastTime = 0
         this._currentTime = 0
-        this._resolution = gtk.gdk.screen_height() / float(gtk.gdk.screen_height_mm())
+        this._resolution = Gdk.Screen.height() / float(Gdk.Screen.height_mm())
         this._offset = (0, 0)
 
     def get_view_pos(this):
@@ -93,11 +94,11 @@ class GCodeRenderWidget(gtk.DrawingArea):
                 # Start playing the job animation
                 this._startTime = time.time()
                 this._lastTime = this._startTime
-                this._eventID = gobject.timeout_add(100, this.animate_cb)
+                this._eventID = GObject.timeout_add(100, this.animate_cb)
             else:
                 # Stop playing the animation
                 if (this._eventID):
-                    gobject.source_remove(this._eventID)
+                    GObject.source_remove(this._eventID)
                     this._eventID = None
 
     def set_time(this, tm):
@@ -151,11 +152,12 @@ class GCodeRenderWidget(gtk.DrawingArea):
         return this._paths[-1]
 
     def repaint_buffer(this):
-        (canvasWidth, canvasHeight) = this.window.get_size()
+        canvasWidth = this.get_allocated_width()
+        canvasHeight = this.get_allocated_height()
 
 #        if (not this._pixmap or this._pixmap.get_size() != (w,h)):
 #            this._repaint = True
-#            this._pixmap = gtk.gdk.Pixmap(this.window, w, h)
+#            this._pixmap = Gdk.Pixmap(this.get_toplevel(), w, h)
 
 #        if (not this._repaint):
 #            # A repaint is not needed
@@ -173,7 +175,7 @@ class GCodeRenderWidget(gtk.DrawingArea):
             pathParam = (this._currentTime-currentPath.startTime)/currentPath.duration
 
         # Create a cairo context which we will use to do the rendering
-        cr = this.window.cairo_create()
+        cr = this.get_window().cairo_create()
 #        cr = this._pixmap.cairo_create()
         #cr.rectangle(event.area.x, event.area.y, event.area.width, event.area.height)
         #cr.clip()
@@ -336,14 +338,14 @@ class GCodeRenderWidget(gtk.DrawingArea):
         this.repaint_buffer()
 #        if (this._pixmap):
 #            gc = this.get_style().white_gc
-#            this.window.draw_drawable(gc, this._pixmap, 0, 0, 0, 0, -1, -1)
+#            this.get_toplevel().draw_drawable(gc, this._pixmap, 0, 0, 0, 0, -1, -1)
 
     def animate_cb(this, *args):
         this.queue_draw()
         return True
 
-gobject.signal_new("time-changed", GCodeRenderWidget, 
-    gobject.SIGNAL_RUN_LAST,
-    gobject.TYPE_NONE,
-    (gobject.TYPE_FLOAT,))
+GObject.signal_new("time-changed", GCodeRenderWidget,
+    GObject.SignalFlags.RUN_LAST,
+    None,
+    (GObject.TYPE_FLOAT,))
 

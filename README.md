@@ -44,8 +44,8 @@ Installation
 
 To run the G-Code simulator you will need:
 
-    * Python 2.6 or later (does not yet run on Python 3)
-    * GTK for Python (http://www.pygtk.org)
+    * Python 2.6 or later, including Python 3 (https://www.python.org/)
+    * PyGObject (https://live.gnome.org/PyGObject)
     * Numpy (http://numpy.scipy.org)
 
 Run the script from the command line:
