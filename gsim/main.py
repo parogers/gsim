@@ -141,7 +141,7 @@ class MainWindow(object):
         tag.set_property("background", "#f03030")
 
         (w, h) = this.window.get_size()
-        text.set_size_request(w//3, -1)
+        scroll.set_size_request(w//3, -1)
 
         # Create a box at the bottom of the window to hold the status label and coordinates label
         hbox = Gtk.HBox()
