@@ -23,15 +23,15 @@ from __future__ import absolute_import, division, print_function
 # Imports #
 ###########
 
-from gi.repository import Pango
 import sys
 try:
     from gi.repository import Gtk
     from gi.repository import Gdk
     from gi.repository import GObject
+    from gi.repository import Pango
 except ImportError:
-    print("ERROR - Cannot import gtk module. Please visit http://www.pyGtk.org/")
-    sys.exit()
+    print("ERROR - Cannot import GObject Introspection module. Please visit https://live.gnome.org/PyGObject\n")
+    raise
 
 from gsim import gcode
 from gsim.render import GCodeRenderWidget

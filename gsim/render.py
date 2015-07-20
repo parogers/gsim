@@ -32,8 +32,8 @@ try:
     from gi.repository import Gdk
     from gi.repository import GObject
 except ImportError:
-    print("ERROR - Cannot import gtk module. Please visit http://www.pyGtk.org/")
-    sys.exit()
+    print("ERROR - Cannot import GObject Introspection module. Please visit https://live.gnome.org/PyGObject\n")
+    raise
 
 ###########
 # Classes #
