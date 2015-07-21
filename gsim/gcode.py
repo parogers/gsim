@@ -24,8 +24,8 @@ import math
 try:
     import numpy
 except ImportError:
-    print("ERROR - Cannot import numpy module.")
-    sys.exit()
+    print("ERROR - Cannot import NumPy module. Please visit http://www.numpy.org/\n")
+    raise
 
 ###########
 # Globals #
