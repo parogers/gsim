@@ -70,11 +70,6 @@ def parse_program(path):
         statement.lineNumber = len(prog.statements)
         if (line.startswith("#")):
             # Assignment statement
-            #m = re.match("^([^\s]*)\s*=.\s*(.*)$", line)
-            #if (not m):
-            #    print "bad line:", repr(line)
-            #    continue
-            #args = m.groups()
             if (len(args) != 3):
                 print("bad line: %s" % repr(line))
                 prog.invalidLines.append(line)
@@ -216,7 +211,6 @@ class Path(object):
 class Line(Path):
     start = None
     end = None
-    #rapidSpeed = 1
     # Whether this represents a rapid movement command (G00), or 
     # a linear interpolation (G01)
     rapid = False
@@ -291,8 +285,6 @@ class State(object):
     minPos = None
     maxPos = None
     pos = None
-    #x = 0
-    #y = 0
     spindleOn = True
     # The paths cut by the laser
     paths = None
@@ -405,7 +397,6 @@ class State(object):
                 line.spindleOn = this.spindleOn
                 line.rapid = (st.code == "G00")
                 line.cmd = (params["X"], params["Y"])
-                #line.command = st.command
                 line.statement = st
                 this.paths.append(line)
                 # Advance the timeline
@@ -431,7 +422,6 @@ class State(object):
                 arc = Arc(this.pos, end, center, this.feedRate, clockwise=(st.code=="G02"))
                 arc.startTime = this.time
                 arc.spindleOn = this.spindleOn
-                #arc.command = st.command
                 arc.statement = st
                 this.paths.append(arc)
                 # Advance the timeline

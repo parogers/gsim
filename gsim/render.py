@@ -40,8 +40,6 @@ except ImportError:
 ###########
 
 class GCodeRenderWidget(Gtk.DrawingArea):
-#    _pathIndex = 0
-#    _pathParam = 0
     # The gcode state
     _state = None
     _lastTime = None
@@ -140,7 +138,6 @@ class GCodeRenderWidget(Gtk.DrawingArea):
     def update_size(this):
         w = this._zoomLevel * (this._state.maxPos[0]-this._state.minPos[0])+2*this._border
         h = this._zoomLevel * (this._state.maxPos[1]-this._state.minPos[1])+2*this._border
-        #this.set_size_request(int(w*this._resolution), int(h*this._resolution))
 
     # Returns the path object currently being rendered
     def get_current_path(this):
@@ -155,15 +152,6 @@ class GCodeRenderWidget(Gtk.DrawingArea):
         canvasWidth = this.get_allocated_width()
         canvasHeight = this.get_allocated_height()
 
-#        if (not this._pixmap or this._pixmap.get_size() != (w,h)):
-#            this._repaint = True
-#            this._pixmap = Gdk.Pixmap(this.get_toplevel(), w, h)
-
-#        if (not this._repaint):
-#            # A repaint is not needed
-#            return
-#        this._repaint = False
-
         # Calculate which path object is being rendered at this time
         currentPath = this.get_current_path()
         if (not currentPath):
@@ -176,9 +164,6 @@ class GCodeRenderWidget(Gtk.DrawingArea):
 
         # Create a cairo context which we will use to do the rendering
         cr = this.get_window().cairo_create()
-#        cr = this._pixmap.cairo_create()
-        #cr.rectangle(event.area.x, event.area.y, event.area.width, event.area.height)
-        #cr.clip()
 
         cr.set_source_rgb(1,1,1)
         cr.rectangle(0, 0, canvasWidth, canvasHeight)
@@ -295,7 +280,7 @@ class GCodeRenderWidget(Gtk.DrawingArea):
                     (angle1, angle2) = (angle2, angle1)
 
                 # Finally render the arc
-                if (abs(angle1-angle2) > 0.06): #path.length > 0.5):
+                if (abs(angle1-angle2) > 0.06):
                     cr.set_source_rgb(0,0,0)
                     cr.arc(
                         path.center[0], 
@@ -336,9 +321,6 @@ class GCodeRenderWidget(Gtk.DrawingArea):
             this._repaint = True
 
         this.repaint_buffer()
-#        if (this._pixmap):
-#            gc = this.get_style().white_gc
-#            this.get_toplevel().draw_drawable(gc, this._pixmap, 0, 0, 0, 0, -1, -1)
 
     def animate_cb(this, *args):
         this.queue_draw()

@@ -112,7 +112,6 @@ class MainWindow(object):
         this.renderArea.connect("button-press-event", this.mouse_button_cb)
         this.renderArea.connect("button-release-event", this.mouse_button_cb)
         this.renderArea.show()
-        #vbox.pack_start(this.renderArea, True, True)
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
         frame.show()
@@ -207,7 +206,6 @@ class MainWindow(object):
         for path in state.paths:
             if (isinstance(path, gcode.Line) and path.rapid):
                 rapidLength += path.length
-        #print "rapid length: %0.1f" % rapidLength
 
         this.timeAdjust.set_upper(state.get_run_length()+1)
         this.state = state
@@ -354,7 +352,6 @@ class MainWindow(object):
     # Called when the user clicks stop
     def stop_cb(this, *args):
         this.renderArea.set_playing(False)
-        #this.renderArea.set_time(0)
 
     # Called when the user moves around the time slider
     def time_slider_changed_cb(this, *args):
